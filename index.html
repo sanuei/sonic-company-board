@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sonic一人公司 - 任务看板</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            color: #fff;
+        }
+
+        .header {
+            background: rgba(0,0,0,0.3);
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .header h1 {
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header h1 span {
+            font-size: 28px;
+        }
+
+        .stats {
+            display: flex;
+            gap: 20px;
+        }
+
+        .stat {
+            text-align: center;
+            padding: 8px 16px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 8px;
+        }
+
+        .stat-number {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            opacity: 0.7;
+        }
+
+        .container {
+            display: flex;
+            gap: 24px;
+            padding: 24px 40px;
+            overflow-x: auto;
+        }
+
+        .column {
+            min-width: 320px;
+            max-width: 350px;
+            flex: 1;
+        }
+
+        .column-header {
+            padding: 16px;
+            border-radius: 12px 12px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .column-header h2 {
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .count {
+            background: rgba(255,255,255,0.2);
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+        }
+
+        .column-content {
+            background: rgba(255,255,255,0.05);
+            border-radius: 0 0 12px 12px;
+            min-height: 400px;
+            padding: 12px;
+        }
+
+        .todo .column-header { background: #6366f1; }
+        .inprogress .column-header { background: #f59e0b; }
+        .done .column-header { background: #10b981; }
+
+        .card {
+            background: rgba(255,255,255,0.1);
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-left: 4px solid transparent;
+        }
+
+        .card:hover {
+            background: rgba(255,255,255,0.15);
+            transform: translateY(-2px);
+        }
+
+        .card.p0 { border-left-color: #ef4444; }
+        .card.p1 { border-left-color: #f59e0b; }
+        .card.p2 { border-left-color: #3b82f6; }
+
+        .card-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .card-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            opacity: 0.7;
+        }
+
+        .card-owner {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .priority {
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+
+        .priority.p0 { background: #ef4444; }
+        .priority.p1 { background: #f59e0b; }
+        .priority.p2 { background: #3b82f6; }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            opacity: 0.5;
+            font-size: 12px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card {
+            animation: fadeIn 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1><span>🦖</span> Sonic一人公司 - 任务看板</h1>
+        <div class="stats">
+            <div class="stat">
+                <div class="stat-number" id="total">0</div>
+                <div class="stat-label">总任务</div>
+            </div>
+            <div class="stat" style="background: rgba(99,102,241,0.3);">
+                <div class="stat-number" id="todo">0</div>
+                <div class="stat-label">待办</div>
+            </div>
+            <div class="stat" style="background: rgba(245,158,11,0.3);">
+                <div class="stat-number" id="progress">0</div>
+                <div class="stat-label">进行中</div>
+            </div>
+            <div class="stat" style="background: rgba(16,185,129,0.3);">
+                <div class="stat-number" id="done">0</div>
+                <div class="stat-label">已完成</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="column todo">
+            <div class="column-header">
+                <h2>📋 待办 (Todo)</h2>
+                <span class="count" id="todo-count">0</span>
+            </div>
+            <div class="column-content" id="todo-list"></div>
+        </div>
+
+        <div class="column inprogress">
+            <div class="column-header">
+                <h2>🔄 进行中 (In Progress)</h2>
+                <span class="count" id="progress-count">0</span>
+            </div>
+            <div class="column-content" id="progress-list"></div>
+        </div>
+
+        <div class="column done">
+            <div class="column-header">
+                <h2>✅ 已完成 (Done)</h2>
+                <span class="count" id="done-count">0</span>
+            </div>
+            <div class="column-content" id="done-list"></div>
+        </div>
+    </div>
+
+    <div class="footer">
+        🤖 由AI团队维护 | 最后更新: <span id="last-update"></span>
+    </div>
+
+    <script>
+        // 任务数据
+        const tasks = [
+            // Todo
+            { id: 1, title: "创建HomeViewModel", owner: "@dev", priority: "P0", status: "todo" },
+            { id: 2, title: "接入MiniMax API", owner: "@dev", priority: "P0", status: "todo" },
+            { id: 3, title: "风水规则库实现", owner: "@dev", priority: "P1", status: "todo" },
+            
+            // In Progress
+            { id: 4, title: "后端API搭建", owner: "@dev", priority: "P0", status: "progress", progress: "60%" },
+            { id: 5, title: "UI新中式风格", owner: "@design", priority: "P1", status: "progress", progress: "40%" },
+            
+            // Done
+            { id: 6, title: "RoomAI项目启动", owner: "@ceo", priority: "P0", status: "done" },
+            { id: 7, title: "MVP功能优先级确认", owner: "@product", priority: "P0", status: "done" },
+            { id: 8, title: "技术开发计划", owner: "@dev", priority: "P0", status: "done" },
+            { id: 9, title: "UI优化建议", owner: "@design", priority: "P1", status: "done" },
+            { id: 10, title: "运营规划", owner: "@ops", priority: "P1", status: "done" },
+            { id: 11, title: "GitHub代码推送", owner: "@dev", priority: "P0", status: "done" },
+            { id: 12, title: "API测试界面", owner: "@design", priority: "P1", status: "done" },
+        ];
+
+        function renderCards(tasks, elementId) {
+            const element = document.getElementById(elementId);
+            element.innerHTML = tasks.map(task => `
+                <div class="card ${task.priority.toLowerCase()}">
+                    <div class="card-title">${task.title}</div>
+                    <div class="card-meta">
+                        <span class="card-owner">${task.owner}</span>
+                        <span class="priority ${task.priority.toLowerCase()}">${task.priority}</span>
+                    </div>
+                    ${task.progress ? `<div style="margin-top:8px;font-size:11px;opacity:0.7">进度: ${task.progress}</div>` : ''}
+                </div>
+            `).join('');
+        }
+
+        function updateStats() {
+            const todo = tasks.filter(t => t.status === 'todo');
+            const progress = tasks.filter(t => t.status === 'progress');
+            const done = tasks.filter(t => t.status === 'done');
+
+            document.getElementById('total').textContent = tasks.length;
+            document.getElementById('todo').textContent = todo.length;
+            document.getElementById('progress').textContent = progress.length;
+            document.getElementById('done').textContent = done.length;
+
+            document.getElementById('todo-count').textContent = todo.length;
+            document.getElementById('progress-count').textContent = progress.length;
+            document.getElementById('done-count').textContent = done.length;
+
+            document.getElementById('last-update').textContent = new Date().toLocaleString('zh-CN', { 
+                timeZone: 'Asia/Tokyo',
+                year: 'numeric',
+                month: '2-digit', 
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        function init() {
+            renderCards(tasks.filter(t => t.status === 'todo'), 'todo-list');
+            renderCards(tasks.filter(t => t.status === 'progress'), 'progress-list');
+            renderCards(tasks.filter(t => t.status === 'done'), 'done-list');
+            updateStats();
+        }
+
+        init();
+    </script>
+</body>
+</html>
