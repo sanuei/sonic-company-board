@@ -5,12 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sonic一人公司 - AI虚拟办公室</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: linear-gradient(180deg, #0a0a1a 0%, #1a1a2e 50%, #16213e 100%);
@@ -19,7 +15,6 @@
             overflow-x: hidden;
         }
 
-        /* Header */
         .header {
             background: linear-gradient(90deg, #1e1e3f 0%, #2d2d5a 100%);
             padding: 15px 30px;
@@ -45,29 +40,46 @@
 
         .header h1 span { font-size: 26px; }
 
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover { transform: translateY(-2px); }
+
+        .btn-success {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            color: white;
+        }
+
         .status-badge {
             padding: 6px 14px;
             border-radius: 20px;
             font-size: 12px;
             background: rgba(16, 185, 129, 0.2);
             color: #10b981;
-            border: 1px solid rgba(16, 185, 129, 0.3);
         }
 
-        /* Office Container */
-        .office-container {
-            display: flex;
-            height: calc(100vh - 70px);
-        }
+        .office-container { display: flex; height: calc(100vh - 70px); }
 
-        /* Virtual Office */
         .office {
             flex: 1;
             position: relative;
-            background: 
-                linear-gradient(180deg, rgba(30,30,60,0.9) 0%, rgba(20,20,40,0.95) 100%),
-                repeating-linear-gradient(0deg, transparent, transparent 50px, rgba(255,255,255,0.03) 50px, rgba(255,255,255,0.03) 51px);
-            overflow: hidden;
+            background: linear-gradient(180deg, rgba(30,30,60,0.9) 0%, rgba(20,20,40,0.95) 100%);
             min-height: 600px;
         }
 
@@ -78,7 +90,6 @@
             right: 0;
             height: 40%;
             background: linear-gradient(180deg, #2d2d5a 0%, #1e1e3f 100%);
-            border-top: 3px solid rgba(255,255,255,0.1);
         }
 
         .office-desk {
@@ -102,19 +113,16 @@
             border-radius: 4px 4px 0 0;
         }
 
-        /* Desk positions */
         .desk-ceo { left: 10%; }
         .desk-product { left: 30%; }
         .desk-design { left: 50%; }
         .desk-dev { left: 70%; }
         .desk-ops { left: 90%; transform: translateX(-50%); }
 
-        /* AI Avatars */
         .avatar {
             position: absolute;
             bottom: calc(30% + 70px);
             width: 70px;
-            height: 100px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -123,10 +131,7 @@
             z-index: 10;
         }
 
-        .avatar:hover {
-            transform: scale(1.1);
-            z-index: 20;
-        }
+        .avatar:hover { transform: scale(1.1); z-index: 20; }
 
         .avatar-body {
             width: 50px;
@@ -137,30 +142,16 @@
             justify-content: center;
             font-size: 24px;
             box-shadow: 0 10px 20px rgba(0,0,0,0.3);
-            transition: all 0.3s;
         }
 
-        .avatar.working .avatar-body {
-            animation: working 1s ease-in-out infinite;
-        }
+        .avatar.working .avatar-body { animation: working 1s ease-in-out infinite; }
+        @keyframes working { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
 
-        @keyframes working {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-5px); }
-        }
+        .avatar.talking .avatar-body { animation: talking 0.5s ease-in-out infinite; }
+        @keyframes talking { 0%, 100% { transform: rotate(-5deg); } 50% { transform: rotate(5deg); } }
 
-        .avatar.talking .avatar-body {
-            animation: talking 0.5s ease-in-out infinite;
-        }
-
-        @keyframes talking {
-            0%, 100% { transform: rotate(-5deg); }
-            50% { transform: rotate(5deg); }
-        }
-
-        .avatar.idle .avatar-body {
-            opacity: 0.7;
-        }
+        .avatar.receiving .avatar-body { animation: receiving 0.8s ease-in-out; }
+        @keyframes receiving { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.2); } }
 
         .avatar-ceo .avatar-body { background: linear-gradient(135deg, #f59e0b, #ef4444); }
         .avatar-product .avatar-body { background: linear-gradient(135deg, #3b82f6, #8b5cf6); }
@@ -182,34 +173,30 @@
             z-index: 1;
         }
 
-        .avatar-name {
-            font-size: 11px;
-            font-weight: bold;
-            margin-top: 5px;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
-            white-space: nowrap;
-        }
-
-        .avatar-status {
-            font-size: 9px;
-            padding: 2px 8px;
-            border-radius: 10px;
-            margin-top: 2px;
-        }
-
+        .avatar-name { font-size: 11px; font-weight: bold; margin-top: 5px; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+        .avatar-status { font-size: 9px; padding: 2px 8px; border-radius: 10px; margin-top: 2px; }
         .avatar-status.working { background: #10b981; }
         .avatar-status.idle { background: #f59e0b; }
         .avatar-status.talking { background: #3b82f6; }
-        .avatar-status.thinking { background: #8b5cf6; }
+        .avatar-status.receiving { background: #8b5cf6; }
 
-        /* Avatar positions */
         .pos-ceo { left: calc(10% - 35px); }
         .pos-product { left: calc(30% - 35px); }
         .pos-design { left: calc(50% - 35px); }
         .pos-dev { left: calc(70% - 35px); }
         .pos-ops { left: calc(90% - 35px); }
 
-        /* Speech Bubble */
+        .task-arrow {
+            position: absolute;
+            font-size: 24px;
+            opacity: 0;
+            transition: all 0.5s;
+            z-index: 15;
+        }
+
+        .task-arrow.show { opacity: 1; animation: arrowMove 1s ease-in-out infinite; }
+        @keyframes arrowMove { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(10px); } }
+
         .speech-bubble {
             position: absolute;
             bottom: 120px;
@@ -223,14 +210,9 @@
             transform: translateY(10px);
             transition: all 0.3s;
             z-index: 100;
-            pointer-events: none;
         }
 
-        .speech-bubble.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
+        .speech-bubble.show { opacity: 1; transform: translateY(0); }
         .speech-bubble::after {
             content: '';
             position: absolute;
@@ -241,9 +223,8 @@
             border-top-color: rgba(255,255,255,0.95);
         }
 
-        /* Sidebar */
         .sidebar {
-            width: 350px;
+            width: 380px;
             background: rgba(20, 20, 40, 0.95);
             border-left: 1px solid rgba(255,255,255,0.1);
             display: flex;
@@ -251,38 +232,80 @@
             overflow: hidden;
         }
 
-        .sidebar-section {
-            padding: 20px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
+        .sidebar-section { padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .sidebar-title { font-size: 14px; font-weight: bold; margin-bottom: 12px; }
 
-        .sidebar-title {
-            font-size: 14px;
-            font-weight: bold;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        /* Chat Messages */
-        .chat-messages {
-            flex: 1;
-            overflow-y: auto;
+        .goal-panel {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(239, 68, 68, 0.1));
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 12px;
             padding: 15px;
         }
 
-        .chat-message {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
-            animation: slideIn 0.3s ease;
+        .goal-input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.1);
+            color: white;
+            font-size: 14px;
+            margin-bottom: 10px;
+            resize: vertical;
+            min-height: 60px;
         }
 
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateX(-20px); }
-            to { opacity: 1; transform: translateX(0); }
+        .goal-input:focus { outline: none; border-color: #f59e0b; }
+
+        .goal-actions { display: flex; gap: 8px; }
+        .goal-actions .btn { flex: 1; padding: 8px; font-size: 12px; }
+
+        .current-goal {
+            background: rgba(245, 158, 11, 0.2);
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 12px;
         }
+
+        .current-goal-label { font-size: 10px; color: #f59e0b; margin-bottom: 5px; }
+        .current-goal-text { font-size: 14px; line-height: 1.4; }
+
+        .task-assign-panel { display: none; margin-top: 15px; }
+        .task-assign-panel.show { display: block; }
+
+        .assign-target { display: flex; gap: 8px; margin-bottom: 10px; }
+
+        .assign-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 600;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            transition: all 0.2s;
+        }
+
+        .assign-btn:hover { transform: translateY(-2px); }
+        .assign-btn.selected { background: linear-gradient(135deg, #10b981, #059669); }
+
+        .task-desc-input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.1);
+            color: white;
+            font-size: 13px;
+            margin-bottom: 10px;
+        }
+
+        .chat-messages { flex: 1; overflow-y: auto; padding: 15px; }
+
+        .chat-message { display: flex; gap: 10px; margin-bottom: 12px; animation: slideIn 0.3s ease; }
+        @keyframes slideIn { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
 
         .chat-avatar {
             width: 36px;
@@ -291,7 +314,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 18px;
+            font-size: 16px;
             flex-shrink: 0;
         }
 
@@ -301,226 +324,93 @@
         .chat-avatar.dev { background: linear-gradient(135deg, #10b981, #14b8a6); }
         .chat-avatar.ops { background: linear-gradient(135deg, #f59e0b, #eab308); }
 
-        .chat-content {
-            flex: 1;
-        }
+        .chat-content { flex: 1; }
+        .chat-header { display: flex; justify-content: space-between; margin-bottom: 3px; }
+        .chat-name { font-weight: bold; font-size: 12px; }
+        .chat-time { font-size: 10px; opacity: 0.6; }
+        .chat-text { font-size: 12px; line-height: 1.4; background: rgba(255,255,255,0.1); padding: 8px; border-radius: 8px; }
 
-        .chat-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 5px;
-        }
-
-        .chat-name {
-            font-weight: bold;
-            font-size: 13px;
-        }
-
-        .chat-time {
-            font-size: 10px;
-            opacity: 0.6;
-        }
-
-        .chat-text {
-            font-size: 12px;
-            line-height: 1.5;
-            background: rgba(255,255,255,0.1);
-            padding: 10px;
-            border-radius: 10px;
-            border-top-left-radius: 2px;
-        }
-
-        /* Task List in Sidebar */
-        .task-list {
-            max-height: 200px;
-            overflow-y: auto;
-        }
-
-        .task-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px;
-            background: rgba(255,255,255,0.05);
-            border-radius: 8px;
-            margin-bottom: 8px;
-            font-size: 12px;
-        }
-
-        .task-item-owner {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .task-status-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-        }
-
-        .task-status-dot.todo { background: #f59e0b; }
-        .task-status-dot.progress { background: #3b82f6; }
-        .task-status-dot.done { background: #10b981; }
-
-        /* Control Panel */
-        .controls {
-            padding: 15px;
-            background: rgba(0,0,0,0.3);
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
+        .controls { padding: 12px; background: rgba(0,0,0,0.3); display: flex; gap: 8px; }
 
         .control-btn {
-            padding: 8px 15px;
+            padding: 8px 12px;
             border: none;
             border-radius: 20px;
             cursor: pointer;
-            font-size: 12px;
-            transition: all 0.2s;
+            font-size: 11px;
             background: rgba(255,255,255,0.1);
             color: white;
         }
 
-        .control-btn:hover {
-            background: rgba(255,255,255,0.2);
-            transform: scale(1.05);
-        }
+        .control-btn:hover { background: rgba(255,255,255,0.2); }
 
-        .control-btn.active {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-        }
-
-        /* Office decorations */
-        .window {
-            position: absolute;
-            top: 50px;
-            width: 100px;
-            height: 150px;
-            background: linear-gradient(180deg, #1a3a5a 0%, #0a2a4a 100%);
-            border: 4px solid #3a3a5a;
-            border-radius: 50px 50px 0 0;
-        }
-
-        .window::after {
-            content: '';
-            position: absolute;
-            top: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 2px;
-            height: 130px;
-            background: #3a3a5a;
-        }
-
-        .window::before {
-            content: '';
-            position: absolute;
-            top: 75px;
-            left: 10px;
-            right: 10px;
-            height: 2px;
-            background: #3a3a5a;
-        }
-
+        .window { position: absolute; top: 50px; width: 100px; height: 150px; background: linear-gradient(180deg, #1a3a5a 0%, #0a2a4a 100%); border: 4px solid #3a3a5a; border-radius: 50px 50px 0 0; }
+        .window::after { content: ''; position: absolute; top: 10px; left: 50%; transform: translateX(-50%); width: 2px; height: 130px; background: #3a3a5a; }
+        .window::before { content: ''; position: absolute; top: 75px; left: 10px; right: 10px; height: 2px; background: #3a3a5a; }
         .window-1 { left: 5%; }
         .window-2 { left: 35%; }
         .window-3 { left: 65%; }
 
-        .plant {
-            position: absolute;
-            bottom: 40%;
-            font-size: 40px;
-        }
-
+        .plant { position: absolute; bottom: 40%; font-size: 40px; }
         .plant-1 { left: 25%; }
         .plant-2 { left: 55%; }
         .plant-3 { left: 85%; }
 
-        /* Clock */
-        .clock {
-            position: absolute;
-            top: 20px;
-            right: 30px;
-            font-size: 24px;
-            font-weight: bold;
-            color: #00d4ff;
-            text-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+        .clock { position: absolute; top: 20px; right: 30px; font-size: 24px; font-weight: bold; color: #00d4ff; text-shadow: 0 0 20px rgba(0, 212, 255, 0.5); }
+
+        .notification {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 12px;
+            z-index: 1000;
+            animation: notifIn 0.3s ease;
         }
 
-        /* Interaction Effect */
-        .interaction-line {
-            position: absolute;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, #00d4ff, transparent);
-            transform-origin: left center;
-            opacity: 0;
-            transition: opacity 0.3s;
-            z-index: 5;
-        }
+        @keyframes notifIn { from { opacity: 0; transform: translateX(50px); } to { opacity: 1; transform: translateX(0); } }
 
-        .interaction-line.show {
-            opacity: 1;
-            animation: linePulse 1s ease-in-out infinite;
-        }
+        .task-list-mini { max-height: 150px; overflow-y: auto; }
 
-        @keyframes linePulse {
-            0%, 100% { opacity: 0.5; }
-            50% { opacity: 1; }
-        }
+        .task-item-mini { display: flex; justify-content: space-between; align-items: center; padding: 8px; background: rgba(255,255,255,0.05); border-radius: 6px; margin-bottom: 6px; font-size: 11px; }
+        .task-item-mini .owner { display: flex; align-items: center; gap: 5px; }
+        .task-status-dot { width: 6px; height: 6px; border-radius: 50%; }
+        .task-status-dot.todo { background: #f59e0b; }
+        .task-status-dot.progress { background: #3b82f6; }
+        .task-status-dot.done { background: #10b981; }
 
-        /* Responsive */
         @media (max-width: 900px) {
-            .office-container {
-                flex-direction: column;
-            }
-            .sidebar {
-                width: 100%;
-                height: 400px;
-            }
+            .office-container { flex-direction: column; }
+            .sidebar { width: 100%; height: 500px; }
         }
     </style>
 </head>
 <body>
     <div class="header">
-        <h1><span>🏢</span> Sonic一人公司 - 虚拟办公室</h1>
-        <span class="status-badge">● 在线</span>
+        <h1><span>🏢</span> Sonic一人公司 - AI虚拟办公室</h1>
+        <span class="status-badge">● CEO在线</span>
     </div>
 
     <div class="office-container">
-        <!-- Virtual Office -->
         <div class="office">
-            <!-- Clock -->
             <div class="clock" id="clock">00:00</div>
-            
-            <!-- Windows -->
             <div class="window window-1"></div>
             <div class="window window-2"></div>
             <div class="window window-3"></div>
-            
-            <!-- Plants -->
             <div class="plant plant-1">🌿</div>
             <div class="plant plant-2">🪴</div>
             <div class="plant plant-3">🌵</div>
-            
-            <!-- Interaction Lines -->
-            <div class="interaction-line" id="line-1"></div>
-            <div class="interaction-line" id="line-2"></div>
-            <div class="interaction-line" id="line-3"></div>
-            
-            <!-- Floor -->
             <div class="office-floor"></div>
-            
-            <!-- Desks -->
             <div class="office-desk desk-ceo"></div>
             <div class="office-desk desk-product"></div>
             <div class="office-desk desk-design"></div>
             <div class="office-desk desk-dev"></div>
             <div class="office-desk desk-ops"></div>
-            
-            <!-- Avatars -->
+
+            <div class="task-arrow" id="task-arrow">📋 ➡️</div>
+
             <div class="avatar avatar-ceo pos-ceo" id="avatar-ceo">
                 <div class="avatar-head">👔</div>
                 <div class="avatar-body">💼</div>
@@ -541,7 +431,7 @@
                 <div class="avatar-head">🎨</div>
                 <div class="avatar-body">✏️</div>
                 <div class="avatar-name">设计</div>
-                <div class="avatar-status working" id="status-design">工作中</div>
+                <div class="avatar-status idle" id="status-design">待命</div>
                 <div class="speech-bubble" id="bubble-design"></div>
             </div>
             
@@ -549,7 +439,7 @@
                 <div class="avatar-head">💻</div>
                 <div class="avatar-body">⌨️</div>
                 <div class="avatar-name">开发</div>
-                <div class="avatar-status working" id="status-dev">工作中</div>
+                <div class="avatar-status idle" id="status-dev">待命</div>
                 <div class="speech-bubble" id="bubble-dev"></div>
             </div>
             
@@ -557,262 +447,218 @@
                 <div class="avatar-head">📈</div>
                 <div class="avatar-body">📱</div>
                 <div class="avatar-name">运营</div>
-                <div class="avatar-status working" id="status-ops">工作中</div>
+                <div class="avatar-status idle" id="status-ops">待命</div>
                 <div class="speech-bubble" id="bubble-ops"></div>
             </div>
         </div>
         
-        <!-- Sidebar -->
         <div class="sidebar">
             <div class="sidebar-section">
-                <div class="sidebar-title">🤖 AI团队状态</div>
-                <div class="task-list" id="agent-status-list"></div>
+                <div class="sidebar-title">🎯 CEO任务指令</div>
+                <div class="goal-panel">
+                    <div class="current-goal" id="current-goal" style="display:none;">
+                        <div class="current-goal-label">当前目标</div>
+                        <div class="current-goal-text" id="goal-text"></div>
+                    </div>
+                    
+                    <textarea class="goal-input" id="goal-input" placeholder="输入CEO目标指令...&#10;例如：完成RoomAI的ViewModel开发"></textarea>
+                    
+                    <div class="goal-actions">
+                        <button class="btn btn-primary" onclick="setGoal()">🚀 发布目标</button>
+                        <button class="btn btn-success" onclick="showAssignPanel()">📋 分配任务</button>
+                    </div>
+                    
+                    <div class="task-assign-panel" id="assign-panel">
+                        <div class="sidebar-title" style="font-size:12px;">选择执行者</div>
+                        <div class="assign-target">
+                            <button class="assign-btn" data-agent="product" onclick="selectAgent(this)">📋 产品</button>
+                            <button class="assign-btn" data-agent="design" onclick="selectAgent(this)">🎨 设计</button>
+                            <button class="assign-btn" data-agent="dev" onclick="selectAgent(this)">💻 开发</button>
+                            <button class="assign-btn" data-agent="ops" onclick="selectAgent(this)">📈 运营</button>
+                        </div>
+                        <input type="text" class="task-desc-input" id="task-desc" placeholder="具体任务描述...">
+                        <button class="btn btn-warning" style="width:100%" onclick="assignTask()">✅ 派发任务</button>
+                    </div>
+                </div>
             </div>
             
-            <div class="chat-messages" id="chat-messages">
-                <!-- Chat messages will appear here -->
+            <div class="sidebar-section">
+                <div class="sidebar-title">📋 任务列表</div>
+                <div class="task-list-mini" id="task-list"></div>
             </div>
+            
+            <div class="chat-messages" id="chat-messages"></div>
             
             <div class="controls">
-                <button class="control-btn active" onclick="setMode('auto')">🤖 自动模式</button>
-                <button class="control-btn" onclick="simulateInteraction()">💬 模拟对话</button>
-                <button class="control-btn" onclick="resetAvatars()">🔄 重置</button>
+                <button class="control-btn" onclick="resetOffice()">🔄 重置</button>
+                <button class="control-btn" onclick="simulateTask()">▶️ 模拟任务</button>
             </div>
         </div>
     </div>
 
     <script>
-        // Agent Data
         const agents = [
-            { id: 'ceo', name: 'CEO', role: '商业决策', emoji: '💼', color: '#f59e0b' },
-            { id: 'product', name: '产品经理', role: '产品规划', emoji: '📊', color: '#3b82f6' },
-            { id: 'design', name: '设计师', role: 'UI/UX', emoji: '✏️', color: '#ec4899' },
-            { id: 'dev', name: '开发', role: '技术实现', emoji: '⌨️', color: '#10b981' },
-            { id: 'ops', name: '运营', role: '推广运营', emoji: '📱', color: '#eab308' }
+            { id: 'ceo', name: 'CEO', role: '商业决策', emoji: '💼' },
+            { id: 'product', name: '产品经理', role: '产品规划', emoji: '📊' },
+            { id: 'design', name: '设计师', role: 'UI/UX', emoji: '✏️' },
+            { id: 'dev', name: '开发', role: '技术实现', emoji: '⌨️' },
+            { id: 'ops', name: '运营', role: '推广运营', emoji: '📱' }
         ];
 
-        // Tasks
-        let tasks = [
-            { id: 1, title: "创建HomeViewModel", owner: "@dev", status: "progress" },
-            { id: 2, title: "接入MiniMax API", owner: "@dev", status: "todo" },
-            { id: 3, title: "后端API搭建", owner: "@dev", status: "progress" },
-            { id: 4, title: "UI新中式风格", owner: "@design", status: "progress" },
-            { id: 5, title: "制定推广策略", owner: "@ops", status: "progress" },
-            { id: 6, title: "MVP功能确认", owner: "@product", status: "done" },
-            { id: 7, title: "项目启动", owner: "@ceo", status: "done" },
-        ];
+        let currentGoal = '';
+        let selectedAgent = null;
+        let tasks = [];
+        let chatHistory = [];
+        let taskIdCounter = 1;
 
-        // Chat messages
-        let chatHistory = [
-            { agent: 'dev', text: '后端API已完成60%，正在接入MiniMax SDK', time: '22:03' },
-            { agent: 'design', text: 'UI风格已确定，开始组件开发', time: '22:01' },
-            { agent: 'ops', text: '推广方案已提交，等待CEO审批', time: '21:58' },
-            { agent: 'product', text: 'MVP功能列表已确认', time: '21:55' },
-            { agent: 'ceo', text: 'RoomAI项目正式启动！', time: '21:50' },
-        ];
-
-        // Sample dialogues for simulation
-        const dialogues = [
-            { from: 'ceo', to: 'product', text: '@product MVP功能优先级确认了吗？' },
-            { from: 'product', to: 'ceo', text: '已确认，P0功能包括户型图上传和AI识别' },
-            { from: 'product', to: 'design', text: '@design UI设计稿什么时候能完成？' },
-            { from: 'design', to: 'product', text: '预计明天完成初版设计' },
-            { from: 'dev', to: 'design', text: '@design 需要一个加载动画素材' },
-            { from: 'design', to: 'dev', text: '稍后发给你，是水墨晕染效果' },
-            { from: 'ops', to: 'ceo', text: '@ceo 推广预算需要确认' },
-            { from: 'ceo', to: 'ops', text: '先按最小可行性预算来，执行吧' },
-        ];
-
-        let currentDialogue = 0;
-        let autoMode = true;
-        let dialogueInterval;
-
-        // Clock
         function updateClock() {
             const now = new Date();
-            const time = now.toLocaleTimeString('zh-CN', { 
-                timeZone: 'Asia/Tokyo',
-                hour: '2-digit', 
-                minute: '2-digit' 
-            });
-            document.getElementById('clock').textContent = time;
+            document.getElementById('clock').textContent = now.toLocaleTimeString('zh-CN', { timeZone: 'Asia/Tokyo', hour: '2-digit', minute: '2-digit' });
         }
         setInterval(updateClock, 1000);
         updateClock();
 
-        // Render Agent Status
-        function renderAgentStatus() {
-            const list = document.getElementById('agent-status-list');
-            list.innerHTML = agents.map(agent => {
-                const agentTasks = tasks.filter(t => t.owner === '@' + agent.id);
-                const progress = agentTasks.filter(t => t.status === 'progress').length;
-                const done = agentTasks.filter(t => t.status === 'done').length;
-                
-                return `
-                    <div class="task-item">
-                        <div class="task-item-owner">
-                            <span style="font-size:16px">${agent.emoji}</span>
-                            <span>${agent.name}</span>
-                        </div>
-                        <span style="color: ${agent.color}">${done}/${agentTasks.length}</span>
-                    </div>
-                `;
-            }).join('');
+        function setGoal() {
+            const input = document.getElementById('goal-input');
+            if (!input.value.trim()) return;
+            currentGoal = input.value;
+            document.getElementById('current-goal').style.display = 'block';
+            document.getElementById('goal-text').textContent = currentGoal;
+            showSpeechBubble('ceo', '发布目标: ' + currentGoal.substring(0, 15) + '...');
+            addChatMessage('ceo', '🎯 发布目标: ' + currentGoal);
+            showNotification('CEO已发布新目标！');
+            input.value = '';
         }
 
-        // Render Chat
-        function renderChat() {
-            const container = document.getElementById('chat-messages');
-            container.innerHTML = chatHistory.map(msg => {
-                const agent = agents.find(a => a.id === msg.agent);
-                return `
-                    <div class="chat-message">
-                        <div class="chat-avatar ${msg.agent}">${agent.emoji}</div>
-                        <div class="chat-content">
-                            <div class="chat-header">
-                                <span class="chat-name" style="color: ${agent.color}">${agent.name}</span>
-                                <span class="chat-time">${msg.time}</span>
-                            </div>
-                            <div class="chat-text">${msg.text}</div>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-            container.scrollTop = container.scrollHeight;
+        function showAssignPanel() {
+            if (!currentGoal) { showNotification('请先设置目标！'); return; }
+            document.getElementById('assign-panel').classList.toggle('show');
         }
 
-        // Show Speech Bubble
+        function selectAgent(btn) {
+            document.querySelectorAll('.assign-btn').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+            selectedAgent = btn.dataset.agent;
+        }
+
+        function assignTask() {
+            const taskDesc = document.getElementById('task-desc').value;
+            if (!taskDesc || !selectedAgent) { showNotification('请选择执行者和任务！'); return; }
+            
+            const task = { id: taskIdCounter++, title: taskDesc, owner: '@' + selectedAgent, status: 'todo' };
+            tasks.unshift(task);
+            updateAvatarStatus(selectedAgent, 'receiving', '收到任务');
+            
+            const targetName = agents.find(a => a.id === selectedAgent).name;
+            showSpeechBubble('ceo', '@' + targetName + ' 去做: ' + taskDesc.substring(0, 15) + '...');
+            addChatMessage('ceo', '📋 指派任务给' + targetName + ': ' + taskDesc);
+            showTaskArrow('ceo', selectedAgent);
+            
+            setTimeout(() => {
+                updateAvatarStatus(selectedAgent, 'working', '工作中');
+                addChatMessage(selectedAgent, '✅ 收到任务: ' + taskDesc);
+            }, 2000);
+            
+            document.getElementById('task-desc').value = '';
+            document.querySelectorAll('.assign-btn').forEach(b => b.classList.remove('selected'));
+            selectedAgent = null;
+            document.getElementById('assign-panel').classList.remove('show');
+            renderTasks();
+        }
+
+        function showTaskArrow(from, to) {
+            const arrow = document.getElementById('task-arrow');
+            const fromAvatar = document.getElementById('avatar-' + from);
+            const toAvatar = document.getElementById('avatar-' + to);
+            const fromRect = fromAvatar.getBoundingClientRect();
+            const toRect = toAvatar.getBoundingClientRect();
+            const office = document.querySelector('.office').getBoundingClientRect();
+            arrow.style.left = (fromRect.right - office.left) + 'px';
+            arrow.style.top = (fromRect.top - office.top + 30) + 'px';
+            arrow.classList.add('show');
+            setTimeout(() => arrow.classList.remove('show'), 3000);
+        }
+
         function showSpeechBubble(agentId, text) {
             const bubble = document.getElementById('bubble-' + agentId);
             bubble.textContent = text;
             bubble.classList.add('show');
-            
-            // Set avatar to talking state
             const avatar = document.getElementById('avatar-' + agentId);
             avatar.classList.add('talking');
-            
-            setTimeout(() => {
-                bubble.classList.remove('show');
-                avatar.classList.remove('talking');
-            }, 3000);
+            setTimeout(() => { bubble.classList.remove('show'); avatar.classList.remove('talking'); }, 3000);
         }
 
-        // Update Avatar Status
         function updateAvatarStatus(agentId, status, statusText) {
             const avatar = document.getElementById('avatar-' + agentId);
             const statusEl = document.getElementById('status-' + agentId);
-            
             avatar.className = 'avatar avatar-' + agentId + ' ' + status;
             statusEl.className = 'avatar-status ' + status;
             statusEl.textContent = statusText;
         }
 
-        // Simulate Interaction
-        function simulateInteraction() {
-            if (currentDialogue >= dialogues.length) {
-                currentDialogue = 0;
-            }
-            
-            const dialogue = dialogues[currentDialogue];
-            
-            // Show speech from sender
-            setTimeout(() => {
-                showSpeechBubble(dialogue.from, dialogue.text);
-                addChatMessage(dialogue.from, dialogue.text);
-                updateAvatarStatus(dialogue.from, 'talking', '对话中');
-            }, 500);
-            
-            // Show response from receiver
-            setTimeout(() => {
-                const responses = [
-                    { from: 'product', text: '好的，我来处理' },
-                    { from: 'design', text: '明白了' },
-                    { from: 'dev', text: '收到' },
-                    { from: 'ops', text: '没问题' },
-                    { from: 'ceo', text: '很好，继续推进' },
-                ];
-                const response = responses[Math.floor(Math.random() * responses.length)];
-                showSpeechBubble(response.from, response.text);
-                addChatMessage(response.from, response.text);
-                updateAvatarStatus(response.from, 'talking', '回复中');
-            }, 3500);
-            
-            // Reset after interaction
-            setTimeout(() => {
-                agents.forEach(agent => {
-                    updateAvatarStatus(agent.id, 'working', '工作中');
-                });
-            }, 6000);
-            
-            currentDialogue++;
-        }
-
-        // Add Chat Message
         function addChatMessage(agentId, text) {
             const now = new Date();
-            const time = now.toLocaleTimeString('zh-CN', { 
-                hour: '2-digit', 
-                minute: '2-digit' 
-            });
-            
+            const time = now.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
             chatHistory.unshift({ agent: agentId, text: text, time: time });
-            if (chatHistory.length > 20) chatHistory.pop();
-            
+            if (chatHistory.length > 15) chatHistory.pop();
             renderChat();
         }
 
-        // Auto Mode
-        function setMode(mode) {
-            autoMode = mode === 'auto';
-            
-            document.querySelectorAll('.control-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            event.target.classList.add('active');
-            
-            if (autoMode) {
-                startAutoMode();
-            } else {
-                stopAutoMode();
-            }
+        function renderChat() {
+            const container = document.getElementById('chat-messages');
+            const colors = { ceo: '#f59e0b', product: '#3b82f6', design: '#ec4899', dev: '#10b981', ops: '#eab308' };
+            container.innerHTML = chatHistory.map(msg => {
+                const agent = agents.find(a => a.id === msg.agent);
+                return '<div class="chat-message"><div class="chat-avatar ' + msg.agent + '">' + agent.emoji + '</div><div class="chat-content"><div class="chat-header"><span class="chat-name" style="color:' + colors[msg.agent] + '">' + agent.name + '</span><span class="chat-time">' + msg.time + '</span></div><div class="chat-text">' + msg.text + '</div></div></div>';
+            }).join('');
+            container.scrollTop = container.scrollHeight;
         }
 
-        function startAutoMode() {
-            dialogueInterval = setInterval(() => {
-                simulateInteraction();
-            }, 10000);
+        function renderTasks() {
+            const list = document.getElementById('task-list');
+            if (tasks.length === 0) { list.innerHTML = '<div style="text-align:center;opacity:0.5;padding:20px;">暂无任务</div>'; return; }
+            list.innerHTML = tasks.map(task => {
+                const owner = agents.find(a => a.id === task.owner.replace('@', ''));
+                return '<div class="task-item-mini"><div class="owner"><span class="task-status-dot ' + task.status + '"></span><span>' + owner.emoji + ' ' + task.title.substring(0, 12) + '...</span></div><span>' + (task.status === 'todo' ? '待办' : task.status === 'progress' ? '进行中' : '完成') + '</span></div>';
+            }).join('');
         }
 
-        function stopAutoMode() {
-            clearInterval(dialogueInterval);
+        function showNotification(text) {
+            const existing = document.querySelector('.notification');
+            if (existing) existing.remove();
+            const notif = document.createElement('div');
+            notif.className = 'notification';
+            notif.textContent = text;
+            document.body.appendChild(notif);
+            setTimeout(() => notif.remove(), 3000);
         }
 
-        // Reset Avatars
-        function resetAvatars() {
-            agents.forEach(agent => {
-                updateAvatarStatus(agent.id, 'working', '工作中');
-            });
-            document.querySelectorAll('.speech-bubble').forEach(b => b.classList.remove('show'));
+        function simulateTask() {
+            const agentIds = ['product', 'design', 'dev', 'ops'];
+            const target = agentIds[Math.floor(Math.random() * agentIds.length)];
+            const tasks = ['完成ViewModel开发', '设计新界面', '修复Bug', '编写测试用例'];
+            document.getElementById('goal-input').value = '完成RoomAI项目';
+            setGoal();
+            setTimeout(() => {
+                document.getElementById('task-desc').value = tasks[Math.floor(Math.random() * tasks.length)];
+                document.querySelector('[data-agent="' + target + '"]').click();
+                assignTask();
+            }, 1500);
         }
 
-        // Initialize
-        renderAgentStatus();
+        function resetOffice() {
+            tasks = []; chatHistory = []; currentGoal = '';
+            document.getElementById('current-goal').style.display = 'none';
+            document.getElementById('goal-input').value = '';
+            document.getElementById('task-desc').value = '';
+            document.getElementById('assign-panel').classList.remove('show');
+            agents.forEach(agent => { updateAvatarStatus(agent.id, 'working', agent.id === 'ceo' ? '工作中' : '待命'); });
+            addChatMessage('ceo', '🔄 办公室已重置');
+            renderTasks(); renderChat();
+        }
+
+        renderTasks();
         renderChat();
-        startAutoMode();
-
-        // Random status changes
-        setInterval(() => {
-            if (Math.random() > 0.7) {
-                const randomAgent = agents[Math.floor(Math.random() * agents.length)];
-                const statuses = [
-                    { status: 'thinking', text: '思考中...' },
-                    { status: 'idle', text: '空闲' },
-                    { status: 'working', text: '工作中' }
-                ];
-                const randomStatus = statuses[Math.floor(Math.random() * statuses.length)];
-                updateAvatarStatus(randomAgent.id, randomStatus.status, randomStatus.text);
-            }
-        }, 5000);
     </script>
 </body>
 </html>
